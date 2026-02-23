@@ -105,19 +105,21 @@
       transition: background .12s ease, color .12s ease;
     }
     .navlinks a:hover{ background: rgba(255,255,255,0.06); color: var(--text); }
-
     .navcta{ display:flex; gap:10px; align-items:center; min-width: 230px; justify-content:flex-end; }
 
     .hero{
-      padding: 64px 0 36px;
+      padding: 64px 0 28px;
       position:relative;
     }
+
+    /* ✅ HERO is now single column */
     .hero-grid{
       display:grid;
-      grid-template-columns: 1.1fr 0.9fr;
-      gap: 24px;
+      grid-template-columns: 1fr;
+      gap: 22px;
       align-items: start;
     }
+
     .h1{
       font-size: clamp(34px, 4.4vw, 58px);
       line-height: 1.02;
@@ -147,6 +149,7 @@
       font-size: 13px;
     }
     .trust svg{ opacity: 0.9; }
+
     .hero-card{
       border-radius: var(--radius2);
       background: linear-gradient(180deg, rgba(255,255,255,0.08), rgba(255,255,255,0.04));
@@ -349,6 +352,17 @@
     }
     .cta h3{ margin:0; font-size: 20px; }
     .cta p{ margin: 8px 0 0; color: var(--muted); line-height: 1.6; max-width: 70ch; font-size: 13px; }
+
+    /* form inputs */
+    input, textarea{
+      outline: none;
+      font-family: inherit;
+    }
+    input:focus, textarea:focus{
+      border-color: rgba(124,92,255,0.55) !important;
+      box-shadow: 0 0 0 3px rgba(124,92,255,0.16);
+    }
+
     footer{
       padding: 22px 0 40px;
       color: var(--muted2);
@@ -362,14 +376,13 @@
 
     /* Responsive */
     @media (max-width: 980px){
-      .hero-grid{ grid-template-columns: 1fr; }
       .cards{ grid-template-columns: repeat(2, minmax(0,1fr)); }
       .steps{ grid-template-columns: 1fr; }
       .work-grid{ grid-template-columns: 1fr; }
       .pricing{ grid-template-columns: 1fr; }
       .faq{ grid-template-columns: 1fr; }
       .brand, .navcta{ min-width: auto; }
-      .navlinks{ display:none; } /* simple mobile behavior */
+      .navlinks{ display:none; }
       .mobile-links{ display:flex; gap:10px; flex-wrap:wrap; justify-content:center; padding-bottom: 10px; }
       .mobile-links a{ font-size: 13px; color: var(--muted); padding: 8px 10px; border-radius: 10px; background: rgba(255,255,255,0.04); border: 1px solid rgba(255,255,255,0.10); }
     }
@@ -377,12 +390,6 @@
 </head>
 
 <body>
-  <!-- CONFIG -->
-  <script>
-    // Replace this with your booking link (Calendly / TidyCal / Google Calendar appointment schedule)
-    const CALENDLY_LINK = "https://calendly.com/YOUR-LINK-HERE";
-  </script>
-
   <header>
     <div class="container">
       <div class="nav">
@@ -406,15 +413,16 @@
           <a href="#pricing">Packages</a>
           <a href="#faq">FAQ</a>
           <a href="#about">About</a>
+          <a href="#book">Book Now</a>
         </nav>
 
         <div class="navcta">
           <a class="btn ghost" href="#pricing">See Packages</a>
-          <a class="btn primary" id="bookTop" href="#">Book a Call</a>
+          <a class="btn primary" id="bookTop" href="#book">Book a Call</a>
         </div>
       </div>
 
-      <!-- Mobile quick links -->
+      <!-- Mobile quick links (auto-filled) -->
       <div class="mobile-links" aria-label="Mobile links" style="display:none;"></div>
     </div>
   </header>
@@ -433,7 +441,7 @@
             </p>
 
             <div class="hero-actions">
-              <a class="btn primary" id="bookHero" href="#">Book a Call</a>
+              <a class="btn primary" id="bookHero" href="#book">Book a Call</a>
               <a class="btn" href="#work">See Examples</a>
               <a class="btn ghost" href="#process">How it works</a>
             </div>
@@ -460,47 +468,6 @@
               </div>
             </div>
           </div>
-
-          <div class="hero-card">
-            <div class="pad">
-              <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px;">
-                <div>
-                  <div class="kicker">What you get</div>
-                  <div style="font-weight:800; font-size:18px; margin-top:6px;">A content engine + creator pipeline</div>
-                  <div style="color:var(--muted); font-size:13px; margin-top:8px; line-height:1.6;">
-                    Founder-led strategy, fast creator outreach, tight creative direction, and repeatable monthly delivery.
-                  </div>
-                </div>
-                <span class="badge">Launch-ready</span>
-              </div>
-
-              <div class="metric-grid">
-                <div class="metric">
-                  <b>Creator Matching</b>
-                  <small>Shortlist creators by niche, region, style, and audience fit.</small>
-                </div>
-                <div class="metric">
-                  <b>Script + Hooks</b>
-                  <small>We write hooks and scripts optimized for short-form retention.</small>
-                </div>
-                <div class="metric">
-                  <b>Video Delivery</b>
-                  <small>UGC-style videos with clear CTAs and product clarity.</small>
-                </div>
-                <div class="metric">
-                  <b>Reporting</b>
-                  <small>Track what works and iterate content every cycle.</small>
-                </div>
-              </div>
-            </div>
-            <div class="divider"></div>
-            <div class="pad" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
-              <div style="color:var(--muted2); font-size:12px;">
-                Typical turnaround: <b style="color:var(--text);">2–3 weeks</b> for first batch of content
-              </div>
-              <a class="btn" href="#pricing">View packages →</a>
-            </div>
-          </div>
         </div>
 
         <!-- Mobile links render target -->
@@ -512,6 +479,61 @@
             mobileLinks.innerHTML = navLinks.map(a => `<a href="${a.getAttribute("href")}">${a.textContent}</a>`).join("");
           }
         </script>
+      </div>
+    </section>
+
+    <!-- ✅ WHAT YOU GET (moved down) -->
+    <section id="whatyouget" style="padding-top: 10px;">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker">What you get</div>
+            <h2>A content engine + creator pipeline</h2>
+            <p class="lead">Founder-led strategy, fast creator outreach, tight creative direction, and repeatable monthly delivery.</p>
+          </div>
+          <a class="btn primary" href="#book">Book Now</a>
+        </div>
+
+        <div class="hero-card" style="max-width: 860px; margin: 0 auto;">
+          <div class="pad">
+            <div style="display:flex; justify-content:space-between; align-items:flex-start; gap:12px; flex-wrap:wrap;">
+              <div>
+                <div class="kicker">What you get</div>
+                <div style="font-weight:800; font-size:18px; margin-top:6px;">A content engine + creator pipeline</div>
+                <div style="color:var(--muted); font-size:13px; margin-top:8px; line-height:1.6;">
+                  Founder-led strategy, fast creator outreach, tight creative direction, and repeatable monthly delivery.
+                </div>
+              </div>
+              <span class="badge">Launch-ready</span>
+            </div>
+
+            <div class="metric-grid">
+              <div class="metric">
+                <b>Creator Matching</b>
+                <small>Shortlist creators by niche, region, style, and audience fit.</small>
+              </div>
+              <div class="metric">
+                <b>Script + Hooks</b>
+                <small>We write hooks and scripts optimized for short-form retention.</small>
+              </div>
+              <div class="metric">
+                <b>Video Delivery</b>
+                <small>UGC-style videos with clear CTAs and product clarity.</small>
+              </div>
+              <div class="metric">
+                <b>Reporting</b>
+                <small>Track what works and iterate content every cycle.</small>
+              </div>
+            </div>
+          </div>
+          <div class="divider"></div>
+          <div class="pad" style="display:flex; gap:10px; flex-wrap:wrap; align-items:center; justify-content:space-between;">
+            <div style="color:var(--muted2); font-size:12px;">
+              Typical turnaround: <b style="color:var(--text);">2–3 weeks</b> for first batch of content
+            </div>
+            <a class="btn" href="#pricing">View packages →</a>
+          </div>
+        </div>
       </div>
     </section>
 
@@ -527,7 +549,7 @@
               You get consistent videos without building an in-house team.
             </p>
           </div>
-          <a class="btn primary" id="bookServices" href="#">Book a Call</a>
+          <a class="btn primary" id="bookServices" href="#book">Book a Call</a>
         </div>
 
         <div class="cards">
@@ -679,7 +701,7 @@
               <li>Script hooks + creator briefs</li>
               <li>Basic performance summary</li>
             </ul>
-            <a class="btn primary" id="bookStarter" href="#">Book a Call</a>
+            <a class="btn primary" id="bookStarter" href="#book">Book a Call</a>
           </div>
 
           <div class="plan featured">
@@ -694,7 +716,7 @@
               <li>Usage rights options</li>
               <li>Monthly report + next plan</li>
             </ul>
-            <a class="btn primary" id="bookGrowth" href="#">Book a Call</a>
+            <a class="btn primary" id="bookGrowth" href="#book">Book a Call</a>
           </div>
 
           <div class="plan">
@@ -708,7 +730,7 @@
               <li>Whitelisting / paid support (optional)</li>
               <li>Dedicated campaign ops</li>
             </ul>
-            <a class="btn primary" id="bookScale" href="#">Book a Call</a>
+            <a class="btn primary" id="bookScale" href="#book">Book a Call</a>
           </div>
         </div>
       </div>
@@ -808,6 +830,107 @@
       </div>
     </section>
 
+    <!-- ✅ BOOK NOW (Brand + Influencer forms) -->
+    <section id="book">
+      <div class="container">
+        <div class="section-head">
+          <div>
+            <div class="kicker">Book Now</div>
+            <h2>Brands and creators — contact SolveHub</h2>
+            <p class="lead">Brands: tell us your goals and product. Influencers: apply to collaborate on US/Canada campaigns.</p>
+          </div>
+        </div>
+
+        <div class="card" style="padding:18px;">
+          <!-- Tabs -->
+          <div style="display:flex; gap:10px; flex-wrap:wrap; margin-bottom:14px;">
+            <button class="btn primary" id="tabBrand" type="button">I’m a Brand / Company</button>
+            <button class="btn" id="tabInfluencer" type="button">I’m an Influencer / Creator</button>
+          </div>
+
+          <!-- BRAND FORM -->
+          <form id="brandForm" class="formBlock">
+            <div class="cards" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:0;">
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Name</label>
+                <input name="name" required placeholder="Your name"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Email</label>
+                <input name="email" type="email" required placeholder="you@company.com"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Company / Brand</label>
+                <input name="company" required placeholder="Brand name"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Product category</label>
+                <input name="category" placeholder="Beauty / Home / Food / etc."
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="grid-column: 1 / -1; min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">What do you want to achieve?</label>
+                <textarea name="goals" required
+                          placeholder="Example: launch in the US, get 10 videos, test 3 hooks, run ads with UGC…"
+                          rows="5"
+                          style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text); resize:vertical;"></textarea>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:14px;">
+              <button class="btn primary" type="submit">Send (Brand Inquiry)</button>
+              <div id="brandMsg" style="color:var(--muted2); font-size:12px;"></div>
+            </div>
+          </form>
+
+          <!-- INFLUENCER FORM -->
+          <form id="influencerForm" class="formBlock" style="display:none;">
+            <div class="cards" style="grid-template-columns: repeat(2, minmax(0,1fr)); margin-top:0;">
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Name</label>
+                <input name="name" required placeholder="Your name"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Email</label>
+                <input name="email" type="email" required placeholder="your@email.com"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Primary platform</label>
+                <input name="platform" placeholder="TikTok / Instagram / YouTube"
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Profile link</label>
+                <input name="profile" required placeholder="https://..."
+                       style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text);">
+              </div>
+              <div class="card" style="grid-column: 1 / -1; min-height:auto;">
+                <label style="display:block; font-size:13px; color:var(--muted2);">Niche + audience (location, age, interests)</label>
+                <textarea name="niche" required
+                          placeholder="Example: Vancouver lifestyle + beauty; mostly US/Canada audience…"
+                          rows="5"
+                          style="width:100%; margin-top:8px; padding:12px; border-radius:12px; border:1px solid rgba(255,255,255,0.12); background:rgba(0,0,0,0.18); color:var(--text); resize:vertical;"></textarea>
+              </div>
+            </div>
+
+            <div style="display:flex; gap:12px; flex-wrap:wrap; align-items:center; margin-top:14px;">
+              <button class="btn primary" type="submit">Send (Creator Application)</button>
+              <div id="creatorMsg" style="color:var(--muted2); font-size:12px;"></div>
+            </div>
+          </form>
+
+          <div style="margin-top:14px; color:var(--muted2); font-size:12px;">
+            Prefer email? <a href="mailto:hello@solvehub.tech" style="text-decoration:underline;">hello@solvehub.tech</a>
+          </div>
+        </div>
+      </div>
+    </section>
+
     <!-- FINAL CTA -->
     <section>
       <div class="container">
@@ -819,7 +942,7 @@
             </p>
           </div>
           <div style="display:flex; gap:12px; flex-wrap:wrap;">
-            <a class="btn primary" id="bookBottom" href="#">Book a Call</a>
+            <a class="btn primary" id="bookBottom" href="#book">Book a Call</a>
             <a class="btn" href="#services">See Services</a>
           </div>
         </div>
@@ -846,36 +969,84 @@
           <a href="#services">Services</a>
           <a href="#pricing">Packages</a>
           <a href="#faq">FAQ</a>
-          <a href="#" id="bookFooter">Book a Call</a>
+          <a href="#book" id="bookFooter">Book a Call</a>
+          <a href="mailto:hello@solvehub.tech">Email</a>
         </div>
       </div>
     </div>
   </footer>
 
   <script>
-    // Set year
+    // Footer year
     document.getElementById("year").textContent = new Date().getFullYear();
 
-    // Wire all booking buttons
-    const bookIds = ["bookTop","bookHero","bookServices","bookStarter","bookGrowth","bookScale","bookBottom","bookFooter"];
-    bookIds.forEach(id => {
-      const el = document.getElementById(id);
-      if (!el) return;
-      el.setAttribute("href", CALENDLY_LINK);
-      el.setAttribute("target", "_blank");
-      el.setAttribute("rel", "noopener noreferrer");
-    });
-
-    // FAQ accordion
+    // ✅ FAQ accordion
     document.querySelectorAll(".qa .q").forEach(q => {
       q.addEventListener("click", () => {
         const qa = q.closest(".qa");
         const isOpen = qa.classList.contains("open");
-        // close others for cleaner feel
         document.querySelectorAll(".qa.open").forEach(x => x.classList.remove("open"));
         if (!isOpen) qa.classList.add("open");
       });
     });
+
+    // ✅ Tabs for Book Now
+    const tabBrand = document.getElementById("tabBrand");
+    const tabInfluencer = document.getElementById("tabInfluencer");
+    const brandForm = document.getElementById("brandForm");
+    const influencerForm = document.getElementById("influencerForm");
+
+    function setTab(which){
+      const isBrand = which === "brand";
+      brandForm.style.display = isBrand ? "block" : "none";
+      influencerForm.style.display = isBrand ? "none" : "block";
+      tabBrand.className = isBrand ? "btn primary" : "btn";
+      tabInfluencer.className = isBrand ? "btn" : "btn primary";
+    }
+    tabBrand.addEventListener("click", () => setTab("brand"));
+    tabInfluencer.addEventListener("click", () => setTab("influencer"));
+
+    // ✅ Cloudflare static forms via Formspree (REPLACE these 2 URLs)
+    const BRAND_ENDPOINT   = "https://formspree.io/f/xxxxabcd";
+    const CREATOR_ENDPOINT = "https://formspree.io/f/yyyyefgh";
+
+    async function wireForm(form, endpoint, msgEl){
+      form.addEventListener("submit", async (e) => {
+        e.preventDefault();
+        msgEl.style.color = "rgba(255,255,255,0.70)";
+        msgEl.textContent = "Sending…";
+
+        try{
+          const data = new FormData(form);
+          data.append("form_type", endpoint === BRAND_ENDPOINT ? "brand_inquiry" : "creator_application");
+          data.append("page", window.location.href);
+
+          const res = await fetch(endpoint, {
+            method: "POST",
+            body: data,
+            headers: { "Accept": "application/json" }
+          });
+
+          if (res.ok){
+            form.reset();
+            msgEl.style.color = "rgba(52,211,153,0.95)";
+            msgEl.textContent = "Submitted! We’ll get back to you soon.";
+          } else {
+            msgEl.style.color = "rgba(255,255,255,0.70)";
+            msgEl.textContent = "Couldn’t submit. Please try again or email us.";
+          }
+        } catch(err){
+          msgEl.style.color = "rgba(255,255,255,0.70)";
+          msgEl.textContent = "Network error. Please try again.";
+        }
+      });
+    }
+
+    wireForm(brandForm, BRAND_ENDPOINT, document.getElementById("brandMsg"));
+    wireForm(influencerForm, CREATOR_ENDPOINT, document.getElementById("creatorMsg"));
+
+    // ✅ Make sure these ids exist if you add more buttons later
+    // (They already point to #book in this file)
   </script>
 </body>
 </html>
